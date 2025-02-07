@@ -1,21 +1,72 @@
 // API 엔드포인트 URL (백엔드 Part에서 전달한 URL로 업데이트)
 const API_ENDPOINT = "/api/controlnet";
 
-// 스케치 기능 추가
+// 스케치 기능 추가 (부드러운 선 그리기 및 터치 이벤트 지원)
 const canvas = document.getElementById("sketchCanvas");
 const ctx = canvas.getContext("2d");
 let drawing = false;
 
-canvas.addEventListener("mousedown", () => (drawing = true));
-canvas.addEventListener("mouseup", () => (drawing = false));
-canvas.addEventListener("mouseout", () => (drawing = false));
+// 선 스타일 설정
+ctx.lineWidth = 3; // 선의 두께
+ctx.lineCap = "round"; // 선 끝을 둥글게 처리
+ctx.strokeStyle = "#000"; // 선 색상
+
+function getCoordinates(event) {
+  const rect = canvas.getBoundingClientRect();
+  const clientX = event.touches ? event.touches[0].clientX : event.clientX;
+  const clientY = event.touches ? event.touches[0].clientY : event.clientY;
+
+  return {
+    x: clientX - rect.left,
+    y: clientY - rect.top,
+  };
+}
+
+// 마우스 이벤트
+canvas.addEventListener("mousedown", (event) => {
+  drawing = true;
+  const { x, y } = getCoordinates(event);
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+});
+
 canvas.addEventListener("mousemove", (event) => {
   if (!drawing) return;
-  const rect = canvas.getBoundingClientRect();
-  const x = event.clientX - rect.left;
-  const y = event.clientY - rect.top;
-  ctx.fillStyle = "#000";
-  ctx.fillRect(x, y, 2, 2);
+  const { x, y } = getCoordinates(event);
+  ctx.lineTo(x, y);
+  ctx.stroke();
+});
+
+canvas.addEventListener("mouseup", () => {
+  drawing = false;
+  ctx.closePath();
+});
+
+canvas.addEventListener("mouseout", () => {
+  drawing = false;
+  ctx.closePath();
+});
+
+// 터치 이벤트
+canvas.addEventListener("touchstart", (event) => {
+  drawing = true;
+  const { x, y } = getCoordinates(event);
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  event.preventDefault();
+});
+
+canvas.addEventListener("touchmove", (event) => {
+  if (!drawing) return;
+  const { x, y } = getCoordinates(event);
+  ctx.lineTo(x, y);
+  ctx.stroke();
+  event.preventDefault();
+});
+
+canvas.addEventListener("touchend", () => {
+  drawing = false;
+  ctx.closePath();
 });
 
 // 모델 실행 버튼 이벤트
