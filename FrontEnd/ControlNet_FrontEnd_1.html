@@ -1,32 +1,31 @@
 <!DOCTYPE html>
 <html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <title>ControlNet 모델 UI 데모</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <div class="container">
-      <h1>ControlNet 모델 데모</h1>
-      <!-- 스케치 캔버스 -->
-      <label for="sketchCanvas">이미지 스케치:</label>
-      <canvas
-        id="sketchCanvas"
-        width="500"
-        height="400"
-        style="border: 1px solid #fedf50; background: #fff"
-      ></canvas>
+<head>
+  <meta charset="UTF-8">
+  <title>ControlNet 모델 UI 데모</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>ControlNet 모델 데모</h1>
 
-      <!-- 추가 파라미터 입력 -->
-      <label for="option">모델 옵션 (예: fine-tuning 파라미터):</label>
-      <input type="text" id="option" placeholder="옵션값 입력" />
+    <!-- 스케치 캔버스 -->
+    <label for="sketchCanvas">이미지 스케치:</label>
+    <canvas id="sketchCanvas" width="500" height="400" style="border: 1px solid #fedf50; background: #fff"></canvas>
+    
+    <!-- 지우기 버튼 -->
+    <button type="button" id="clearCanvas">지우기</button>
 
-      <button type="button" id="runModel">모델 실행</button>
+    <!-- 추가 파라미터 입력 -->
+    <label for="option">프롬프트 입력:</label>
+    <input type="text" id="option" placeholder="A digital sketch">
 
-      <!-- 결과 표시 영역 -->
-      <div class="result" id="result"></div>
-    </div>
+    <button type="button" id="runModel">모델 실행</button>
 
-    <script src="final_script.js"></script>
-  </body>
+    <!-- 결과 표시 영역 -->
+    <div class="result" id="result"></div>
+  </div>
+
+  <script src="final_script.js"></script>
+</body>
 </html>
