@@ -1,60 +1,37 @@
-/* 기본 스타일 */
-body {
-  font-family: "Inter", sans-serif;
-  background: #fffff6;
+html, body {
   margin: 0;
-  padding: 20px;
-}
-.container {
-  max-width: 600px;
-  margin: 0 auto;
-  background: #fffff6;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-h1 {
-  text-align: center;
-  color: #ff8e03;
-}
-label {
-  display: block;
-  margin-top: 15px;
-  color: #979797;
-}
-input[type="file"],
-input[type="text"] {
+  padding: 0;
   width: 100%;
-  padding: 8px;
-  margin-top: 5px;
-  box-sizing: border-box;
-  border: 1px solid #fedf50;
-  border-radius: 4px;
+  height: 100%;
+  overflow: hidden; /* 스크롤바가 생기지 않도록 */
 }
-button {
-  margin-top: 20px;
-  padding: 10px 20px;
-  font-size: 16px;
-  border: none;
-  background: #ff8e03;
-  color: #fffff6;
-  border-radius: 22px;
-  cursor: pointer;
-  transition: background 0.3s;
+
+#container {
+  width: 1920px;       /* 원본 디자인 너비 */
+  height: 1080px;      /* 원본 디자인 높이 */
+  position: relative;
+  transform-origin: top left;
 }
-button:hover {
-  background: #45a049;
+
+/* 창 크기에 맞춰 컨테이너를 스케일링 */
+@media screen {
+  /* 수평, 수직 비율 중 작은 쪽을 기준으로 스케일을 계산 */
+  #container {
+    transform: scale(
+      calc(min(100vw / 1920, 100vh / 1080))
+    );
+  }
 }
-.result {
-  margin-top: 20px;
-  text-align: center;
+.wrapper {
+  width: 80vw;
+  max-width: 1200px;
+  aspect-ratio: 4 / 3;
+  background-color: #FFFFF6;
 }
-.result img {
-  max-width: 100%;
-  border: 5px solid #fedf50;
-  border-radius: 4px;
-}
-.loading {
-  font-size: 16px;
-  color: #ff8e03;
+
+/* 아이패드에서 크기 자동 조정 */
+@media screen and (max-width: 1024px) { 
+  .wrapper {
+    zoom: 0.75;
+  }
 }

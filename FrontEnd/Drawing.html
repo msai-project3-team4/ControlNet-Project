@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>DRAWRY-Drawing</title>
+    <style>
+
+      /* 원본 크기를 고정하여 비율 유지 */
+      #container {
+      width: 1366px;   /* 원본 너비 */
+      height: 1024px;  /* 원본 높이 */
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform-origin: top left;
+      transform: translate(-50%, -50%);
+      }
+
+    /* 화면 비율에 맞게 스케일링 */
+    @media screen {
+      #container {
+      /* 화면 비율에 맞게 축소/확대 */
+      transform: translate(-50%, -50%) scale(calc(min(100vw / 1366, 100vh / 1024)));
+      }
+      }
+
+      /* 캔버스 스타일 */
+      .drawingsection {
+        border: 5px solid #ff8e03;
+        border-radius: 16px;
+        cursor: crosshair;
+        background: white;
+        /* 터치 스크롤 방지 */
+        touch-action: none;
+      }
+
+      /* 도구 영역 (펜 굵기, 색상, 버튼 등) */
+      .toolbox {
+        width: 435px;
+        height: 100px;
+        position: absolute;
+        left: 787px;
+        top: 981px;
+        background: white;
+        border: 7px solid #ff8e03;
+        border-radius: 16px;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        font-family: Inter, sans-serif;
+      }
+      .toolbox input[type="range"] {
+        width: 100px;
+      }
+      .toolbox input[type="color"] {
+        width: 55px;
+        height: 55px;
+        padding: 0;
+        border: none;
+        background: none;
+      }
+      .toolbox button {
+        width: 52px;
+        height: 55px;
+        border: none;
+        background-size: cover;
+        cursor: pointer;
+      }
+      /* 각 버튼 별 배경 이미지*/
+      #startDrawingBtn {
+        background: url('src/pencil_.png') no-repeat center;
+      }
+      #clearBtn {
+        background: url('src/Eraser_.png') no-repeat center;
+      }
+      #stopDrawingBtn {
+        width: 55px;
+        height: 55px;
+        background: url('src/pointer.png') no-repeat center;
+      }
+      /* 저장 버튼 스타일 */
+      #saveBtn {
+        border: none;
+        width: 276px;
+        height: 67px;
+        background: #ff8e03;
+        border-radius: 40px;
+        position: absolute;
+        left: 10px;
+        top: 0px;
+        cursor: pointer;
+      }
+      /* 저장 버튼 텍스트 */
+      .saveText {
+        position: absolute;
+        left: 69px;
+        top: 15px;
+        text-align: center;
+        color: #fffff6;
+        font-size: 30px;
+        font-family: Inter, sans-serif;
+        font-weight: 800;
+        word-wrap: break-word;
+      }
+    </style>
+  </head>
+  <body>
+  <div id="container">
+    <div style="width: 100%; height: 100%; position: relative">
+      <!-- 배경 div -->
+      <div
+        style="
+          width: 1920px;
+          height: 1080px;
+          left: 0px;
+          top: 0px;
+          position: absolute;
+          background: #fffff6;
+        "
+      ></div>
+
+      <!-- 뒤로가기 버튼 -->
+      <button id="backBtn"
+          style="
+          width: 55px;
+          height: 55px;
+          left: 90px;
+          top: 80px;
+          position: absolute;
+          border: none;
+          cursor: pointer;
+          background-color: #fffff6;"
+      >←</button>
+
+      <!-- 내부 해상도를 지정한 캔버스 -->
+      <canvas
+        id="drawingCanvas"
+        class="drawingsection"
+        width="1729"
+        height="862"
+        style="
+          position: absolute;
+          left: 118px;
+          top: 158px;
+        "
+      ></canvas>
+
+      <!-- 도구 영역 (펜 굵기, 색상, 버튼 등) -->
+      <div class="toolbox">
+        <input type="range" id="penSize" min="1" max="50" value="5" />
+        <button id="startDrawingBtn"></button>
+        <button id="clearBtn"></button>
+        <input type="color" id="colorPicker" value="#000000" />
+        <button id="stopDrawingBtn"></button>
+      </div>
+
+      <!-- 안내 문구 -->
+      <div
+        style="
+          width: 100%;
+          left: 401px;
+          top: 56px;
+          position: absolute;
+          text-align: center;
+          color: #979797;
+          font-size: 28px;
+          font-family: Inter, sans-serif;
+          font-weight: 800;
+          word-wrap: break-word;
+        "
+      >
+        주 인 공 의 전 신 모 습 을 그 려 줘<br />
+        아 래 장 면 의 그 림 을 생 성 해 보 자:D
+      </div>
+
+      <!-- 저장 버튼과 텍스트 -->
+      <div style="position: absolute; left: 1571px; top: 58px; width: 276px; height: 67px;">
+        <button id="saveBtn" onclick="location.href='/Drawry Front/11_getcharacter.html'"></button>
+        <div class="saveText">그림 만들기</div>
+      </div>
+    </div>
+  </div>
+
+    <script>
+      // 요소 가져오기
+      const canvas = document.getElementById("drawingCanvas");
+      const ctx = canvas.getContext("2d");
+      const startDrawingBtn = document.getElementById("startDrawingBtn");
+      const stopDrawingBtn = document.getElementById("stopDrawingBtn");
+      const clearBtn = document.getElementById("clearBtn");
+      const saveBtn = document.getElementById("saveBtn");
+      const colorPicker = document.getElementById("colorPicker");
+      const penSize = document.getElementById("penSize");
+
+      // 그리기 상태 변수
+      let drawing = false;
+      let isDrawingActive = false; // 그리기 모드 활성화 여부
+
+      // 마우스/터치 좌표 추출 (터치 이벤트 지원)
+      function getEventPos(e) {
+        if (e.touches && e.touches[0]) {
+          const rect = canvas.getBoundingClientRect();
+          return {
+            offsetX: e.touches[0].clientX - rect.left,
+            offsetY: e.touches[0].clientY - rect.top,
+          };
+        } else {
+          return { offsetX: e.offsetX, offsetY: e.offsetY };
+        }
+      }
+
+      // 그리기 시작
+      function startDrawing(e) {
+        if (!isDrawingActive) return;
+        drawing = true;
+        // UI에서 설정한 색상, 굵기 적용
+        ctx.strokeStyle = colorPicker.value;
+        ctx.lineWidth = penSize.value;
+        ctx.lineCap = "round";
+        // 시작 좌표 설정
+        const pos = getEventPos(e);
+        ctx.beginPath();
+        ctx.moveTo(pos.offsetX, pos.offsetY);
+        e.preventDefault();
+      }
+
+      // 그리기 진행
+      function draw(e) {
+        if (!drawing || !isDrawingActive) return;
+        const pos = getEventPos(e);
+        ctx.lineTo(pos.offsetX, pos.offsetY);
+        ctx.stroke();
+        e.preventDefault();
+      }
+
+      // 그리기 종료
+      function stopDrawing(e) {
+        if (!isDrawingActive) return;
+        drawing = false;
+        ctx.closePath();
+        if (e) e.preventDefault();
+      }
+
+      // 마우스 이벤트 리스너
+      canvas.addEventListener("mousedown", startDrawing);
+      canvas.addEventListener("mousemove", draw);
+      canvas.addEventListener("mouseup", stopDrawing);
+      canvas.addEventListener("mouseleave", stopDrawing);
+
+      // 터치 이벤트 리스너 (모바일 지원)
+      canvas.addEventListener("touchstart", startDrawing);
+      canvas.addEventListener("touchmove", draw);
+      canvas.addEventListener("touchend", stopDrawing);
+      canvas.addEventListener("touchcancel", stopDrawing);
+
+      // 그리기 시작 버튼 이벤트
+      startDrawingBtn.addEventListener("click", () => {
+        isDrawingActive = true;
+        startDrawingBtn.disabled = true;
+        stopDrawingBtn.disabled = false;
+        canvas.style.borderColor = "#FF4F03"; // 활성화 표시
+      });
+
+      // 그리기 중지 버튼 이벤트
+      stopDrawingBtn.addEventListener("click", () => {
+        isDrawingActive = false;
+        drawing = false;
+        startDrawingBtn.disabled = false;
+        stopDrawingBtn.disabled = true;
+        canvas.style.borderColor = "#ff8e03"; // 비활성화 표시
+      });
+
+      // 캔버스 지우기 버튼 이벤트
+      clearBtn.addEventListener("click", () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      });
+
+      // 그림 저장 버튼 이벤트 (toDataURL 활용)
+      saveBtn.addEventListener("click", () => {
+        const dataURL = canvas.toDataURL("image/png");
+        // 임시 a 태그를 생성하여 다운로드 트리거
+        const link = document.createElement("a");
+        link.href = dataURL;
+        link.download = "drawing.png";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      });
+    </script>
+  </body>
+</html>

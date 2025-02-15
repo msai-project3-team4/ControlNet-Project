@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="kor" dir="Itr">
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+        <style>
+            /* 기본 스타일 */
+body {
+    background: #fffff6;
+    font-family: "Inter", sans-serif;
+    margin:0;
+    padding:0;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+
+}
+
+/*공통 레이아웃*/
+.container{
+    text-align: center;
+    width: 1024px;
+}
+
+.title{
+    font-size: 25px;
+    font-weight: 800;
+    margin-bottom: 20px;
+}
+
+.subtitle{
+    font-size: 20px;
+    color:#979797;
+    margin-bottom: 40px;
+
+}
+
+/*버튼 스타일*/
+.btn-container{ 
+    display:flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap:wrap;
+}
+
+.btn { 
+    border: none;
+    background:#FF8E03;
+    color: #fffff6;
+    font-size: 20px;
+    font-weight: 800;
+    border-radius: 22px; 
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background 0.3s;
+    position:relative;
+    top: 150px;    
+}
+
+.btn:hover {
+    background: #E07702;
+
+}
+
+/*뒤로가기 버튼*/ 
+
+.back-btn{
+    background:none;
+    border:none;
+    font-size: 20px;
+    cursor: pointer;
+    position: absolute;
+    top: 20px;
+    left:20px;
+}
+
+.select-container{ 
+    display:flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap:wrap;
+}
+
+.select-box {
+        width: 391px;
+        height: 340px;
+        background: #FFFFF6;
+        border-radius: 11px;
+        border: 2px solid #FF8E03;
+    }
+
+        </style>
+    </head>
+    <body>
+
+        <section id="loading">
+            <div class="container">
+                <div class="title">입 력 한  정 보 로<br>
+                    로 리 가  그 림 을  만 드 는 중 이 야  !<br>
+                    조 금 만  기 다 려 줘  !</div>
+                <button id="backBtn" class="back-btn">←</button>
+
+            </div>
+        </section>
+
+        <section id="makeimg">
+            <div class="title">그 림 이  완 성 됐 어 !<br>
+                같 이  보 러 갈 래 ?</div>
+            <button class="btn" id="yes">응 !</button>
+            <button id="backBtn" class="back-btn">←</button>
+        </section>
+
+        <section id="showimg">
+            <div class="title">짜 잔 !  마 음 에  드 는 그 림 을 골 라 줘 ! </div>
+            <div class="select-container">
+                <div class="select-box" id="sel1"></div>
+                <div class="select-box" id="sel2"></div>
+                <div class="select-box" id="sel3"></div>
+            </div>
+            <div class="btn-container">
+            <button class="btn" id="retry">다시만들어줘!</button>
+            <button class="btn" id="remake">다시그릴래!</button>
+            </div>
+            <button id="backBtn" class="back-btn">←</button>
+
+        </section>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+    // 섹션 가져오기
+    const loadingSection = document.getElementById("loading");
+    const makeimgSection = document.getElementById("makeimg");
+    const showimgSection = document.getElementById("showimg");
+
+    // 버튼 가져오기
+    const yesBtn = document.getElementById("yes");
+
+    const sel1Btn = document.getElementById("sel1");
+    const sel2Btn = document.getElementById("sel2");
+    const sel3Btn = document.getElementById("sel3");
+
+    const retryBtn = document.getElementById("retry");
+    const remakeBtn = document.getElementById("remake");
+
+    const backBtns = document.querySelectorAll(".back-btn");
+
+    // 초기 설정: 첫 번째 섹션만 보이게 함
+    loadingSection.style.display = "block";
+    makeimgSection.style.display = "none";
+    showimgSection.style.display = "none";
+
+    // 📌 [공통] 이벤트 추가 함수 (클릭 + 터치)
+    function addClickAndTouchEvent(element, callback) {
+        if (element) {
+            element.addEventListener("click", callback);
+            element.addEventListener("touchstart", function (event) {
+                event.preventDefault(); // 터치 시 클릭 이벤트 중복 방지
+                callback();
+            });
+        }
+    }
+
+    // 뒤로가기 버튼 기능 (클릭 + 터치)
+    backBtns.forEach((btn) => {
+        addClickAndTouchEvent(btn, function () {
+            if (whatSection.style.display === "block") {
+                // makeimg → loading
+                makeimgSection.style.display = "none";
+                loadingSection.style.display = "block";
+            } else if (whereSection.style.display === "block") {
+                // showimg → makeimg
+                showimgSection.style.display = "none";
+                makeimgSection.style.display = "block";
+            }
+        });
+    });
+
+    });
+        </script>     
+    </body>
+</html>
