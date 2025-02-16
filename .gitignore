@@ -1,5 +1,3 @@
 __pycache__/
-/static/src
-/static/output
 /static/config.js
 .env

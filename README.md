@@ -22,13 +22,11 @@ ControlNet과 Stable Diffusion을 이용하여 사용자가 그린 스케치를 
 ControlNet-Project/<p>
 │── Model/                  # Model FineTuning<p>
 │── static/<p>
-│   ├── index.html           # 메인 페이지 (getcharacter.html로 연결)<p>
 │   ├── getcharacter.html    # 사용자 프롬프트 입력 페이지<p>
 │   ├── Drawing.html         # 사용자 스케치 입력 페이지<p>
 │   ├── makeimage.html       # 이미지 생성 및 결과 확인 페이지<p>
 │   ├── src/                 # 이미지 및 스타일 파일<p>
-│   ├── config.js            # 환경변수 (Flask 서버 주소)<p>
-│── static/output/           # Flask가 생성한 이미지 저장 폴더<p>
+│   ├── output/           # Flask가 생성한 이미지 저장 폴더<p>
 │── app.py                   # Flask API 서버 (ControlNet 이미지 생성)<p>
 │── README.md                # 프로젝트 설명 파일<p>
 
@@ -51,7 +49,6 @@ python app.py
 ```
 cd static
 python -m http.server 8000
-
 ```
 ### 📌 사용 방법
 1️⃣ 프롬프트 입력 (getcharacter.html)
@@ -69,19 +66,19 @@ python -m http.server 8000
 - 생성된 3개의 이미지를 비교하여 최종 선택합니다.
 
 ### 👨‍💻 개발자
-이름: 남두현[BE - API및 서버담당]<p>
+이름: <b>남두현[BE - API및 서버담당]<p></b>
 이메일: kndh2914@gmail.com<p>
 GitHub: https://github.com/namduhus<p>
 
 
-이름: 이예린[FE - UI/UX] <p>
+이름: <b>이예린[FE - UI/UX] <p></b>
 이메일: yesrin14@gmail.com<p>
 GitHub: https://github.com/y8r1n
 
-이름: 이지수[Model - FineTuning]<p>
+이름: <b>이지수[Model - FineTuning]<p></b>
 이메일: rachleejs@gmail.com<p>
 GitHub: https://github.com/rachleejs
 
-이름: 홍종현[FE - UI/UX]<p>
+이름: <b>홍종현[FE - UI/UX]<p></b>
 이메일: jnyg384@gmail.com<p>
 GitHub: https://github.com/Jonghyun-Hong
