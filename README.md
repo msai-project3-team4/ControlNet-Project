@@ -2,7 +2,7 @@
 ### ControlNet을 활용하여 사용자의 스케치를 기반으로 이미지 생성하는 Drawry 핵심기능
 
 ## 🚀 데모 영상  
-[![Watch the video]![alt text](image.png)https://youtu.be/23IraQ0k-Xk
+![alt text](image.png)https://youtu.be/23IraQ0k-Xk
 ## 🎬 실행 예제
 ![프로젝트 데모](static/ControlNetDrawing.gif)
 
