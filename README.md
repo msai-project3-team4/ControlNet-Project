@@ -1,6 +1,11 @@
 # 📌 ControlNet-Project
 ### ControlNet을 활용하여 사용자의 스케치를 기반으로 이미지 생성하는 Drawry 핵심기능
 
+## 🚀 데모 영상  
+[![Watch the video]![alt text](image.png)https://youtu.be/23IraQ0k-Xk
+## 🎬 실행 예제
+![프로젝트 데모](static/ControlNetDrawing.gif)
+
 ## 📝 프로젝트 개요
 ControlNet과 Stable Diffusion을 이용하여 사용자가 그린 스케치를 기반으로 고품질 이미지를 생성하는 기능능입니다.
 사용자는 간단한 스케치를 그린 후, 특정 프롬프트를 추가하여 더욱 세밀한 이미지를 생성할 수 있습니다.
@@ -29,6 +34,7 @@ ControlNet-Project/<p>
 │   ├── output/           # Flask가 생성한 이미지 저장 폴더<p>
 │── app.py                   # Flask API 서버 (ControlNet 이미지 생성)<p>
 │── README.md                # 프로젝트 설명 파일<p>
+│── requirements.txt         # 설치파일
 
 ## 🚀 설치 및 실행 방법
 ### 1️⃣ 환경 설정
