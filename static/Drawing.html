@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DRAWRY-Drawing</title>
+    <style>
+        /* 기존 CSS 유지 */
+        #container {
+            width: 1366px;
+            height: 1024px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform-origin: top left;
+            transform: translate(-50%, -50%);
+        }
+
+        @media screen {
+            #container {
+                transform: translate(-50%, -50%) scale(calc(min(100vw / 1366, 100vh / 1024)));
+            }
+        }
+
+        .drawingsection {
+            border: 5px solid #ff8e03;
+            border-radius: 16px;
+            cursor: crosshair;
+            background: white;
+            touch-action: none;
+        }
+
+        .toolbox {
+            width: 435px;
+            height: 100px;
+            position: absolute;
+            left: 787px;
+            top: 981px;
+            background: white;
+            border: 7px solid #ff8e03;
+            border-radius: 16px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            font-family: Inter, sans-serif;
+        }
+
+        .toolbox input[type="range"] {
+            width: 100px;
+        }
+
+        .toolbox input[type="color"] {
+            width: 55px;
+            height: 55px;
+            padding: 0;
+            border: none;
+            background: none;
+        }
+
+        .toolbox button {
+            width: 52px;
+            height: 55px;
+            border: none;
+            background-size: cover;
+            cursor: pointer;
+        }
+
+        #startDrawingBtn {
+            background: url('src/pencil_.png') no-repeat center;
+        }
+        #clearBtn {
+            background: url('src/Eraser_.png') no-repeat center;
+        }
+        #stopDrawingBtn {
+            width: 55px;
+            height: 55px;
+            background: url('src/pointer.png') no-repeat center;
+        }
+
+        #saveBtn {
+            border: none;
+            width: 276px;
+            height: 67px;
+            background: #ff8e03;
+            border-radius: 40px;
+            position: absolute;
+            left: 10px;
+            top: 0px;
+            cursor: pointer;
+        }
+
+        .saveText {
+            position: absolute;
+            left: 69px;
+            top: 15px;
+            text-align: center;
+            color: #fffff6;
+            font-size: 30px;
+            font-family: Inter, sans-serif;
+            font-weight: 800;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+
+<div id="container">
+    <div style="width: 100%; height: 100%; position: relative">
+        <div style="width: 1920px; height: 1080px; left: 0px; top: 0px; position: absolute; background: #fffff6;"></div>
+
+        <!-- 뒤로가기 버튼 -->
+        <button id="backBtn" style="width: 55px; height: 55px; left: 90px; top: 80px; position: absolute; border: none; cursor: pointer; background-color: #fffff6;">←</button>
+
+        <!-- 선택된 정보 표시 -->
+        <div id="selectedInfo" style="position: absolute; left: 401px; top: 56px; text-align: center; color: #979797; font-size: 28px; font-family: Inter, sans-serif; font-weight: 800;"></div>
+
+        <!-- 캔버스 -->
+        <canvas id="drawingCanvas" class="drawingsection" width="1729" height="862" style="position: absolute; left: 118px; top: 158px;"></canvas>
+
+        <!-- 도구 영역 -->
+        <div class="toolbox">
+            <input type="range" id="penSize" min="1" max="50" value="5"/>
+            <button id="startDrawingBtn"></button>
+            <button id="clearBtn"></button>
+            <input type="color" id="colorPicker" value="#000000"/>
+            <button id="stopDrawingBtn"></button>
+        </div>
+
+        <!-- 저장 버튼 -->
+        <div style="position: absolute; left: 1571px; top: 58px; width: 276px; height: 67px;">
+            <button id="saveBtn" class="saveText">그림 만들기</button>
+        </div>
+    </div>
+</div>
+
+<script type="module">
+    import CONFIG from './config.js';
+    document.addEventListener("DOMContentLoaded", function () {
+        const canvas = document.getElementById("drawingCanvas");
+        const ctx = canvas.getContext("2d");
+        const saveBtn = document.getElementById("saveBtn");
+        const startDrawingBtn = document.getElementById("startDrawingBtn");
+        const stopDrawingBtn = document.getElementById("stopDrawingBtn");
+        const clearBtn = document.getElementById("clearBtn");
+        const colorPicker = document.getElementById("colorPicker");
+        const penSize = document.getElementById("penSize");
+        let drawing = false;
+        let isDrawingActive = false;
+
+        // ✅ 이전 선택 정보 불러와 표시
+        const time = localStorage.getItem("time") || "알 수 없는 시간";
+        const place = localStorage.getItem("place") || "알 수 없는 장소";
+        const action = localStorage.getItem("action") || "알 수 없는 행동";
+
+        const prompt = `A character in a fantasy world, during ${time}, at ${place}, ${action}`;
+        document.getElementById("selectedInfo").innerText = `주인공이 ${time}에 ${place}에서 ${action}`;
+
+        function getEventPos(e) {
+            if (e.touches && e.touches[0]) {
+                const rect = canvas.getBoundingClientRect();
+                return { offsetX: e.touches[0].clientX - rect.left, offsetY: e.touches[0].clientY - rect.top };
+            } else {
+                return { offsetX: e.offsetX, offsetY: e.offsetY };
+            }
+        }
+
+        function startDrawing(e) {
+            if (!isDrawingActive) return;
+            drawing = true;
+            ctx.strokeStyle = colorPicker.value;
+            ctx.lineWidth = penSize.value;
+            ctx.lineCap = "round";
+            const pos = getEventPos(e);
+            ctx.beginPath();
+            ctx.moveTo(pos.offsetX, pos.offsetY);
+            e.preventDefault();
+        }
+
+        function draw(e) {
+            if (!drawing || !isDrawingActive) return;
+            const pos = getEventPos(e);
+            ctx.lineTo(pos.offsetX, pos.offsetY);
+            ctx.stroke();
+            e.preventDefault();
+        }
+
+        function stopDrawing(e) {
+            drawing = false;
+            ctx.closePath();
+            if (e) e.preventDefault();
+        }
+
+        canvas.addEventListener("mousedown", startDrawing);
+        canvas.addEventListener("mousemove", draw);
+        canvas.addEventListener("mouseup", stopDrawing);
+        canvas.addEventListener("mouseleave", stopDrawing);
+
+        startDrawingBtn.addEventListener("click", () => isDrawingActive = true);
+        stopDrawingBtn.addEventListener("click", () => isDrawingActive = false);
+        clearBtn.addEventListener("click", () => ctx.clearRect(0, 0, canvas.width, canvas.height));
+
+        saveBtn.addEventListener("click", () => {
+            const imageData = canvas.toDataURL("image/png");
+
+            console.log("📤 Sending request to Flask...");
+            console.log("Prompt:", prompt);
+
+            localStorage.setItem("imageProcessing", "true");
+            
+            window.location.href = "makeimage.html";
+
+            fetch(`${CONFIG.FLASK_SERVER}/api/generate`, {
+                method: "POST",
+                body: JSON.stringify({ image: imageData, prompt: prompt }),
+                headers: { "Content-Type": "application/json" }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.staus === "processing") {
+                } else {
+                    alert("이미지 생성에 실패했습니다. 다시 시도해주세요.");
+                }
+            })
+            .catch(error => {
+                alert("Flask 서버와 통신 중 오류가 발생했습니다.");
+            });
+        });
+    });
+</script>
+
+</body>
+</html>

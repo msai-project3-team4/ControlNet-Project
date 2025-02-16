@@ -1,0 +1,37 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden; /* 스크롤바가 생기지 않도록 */
+}
+
+#container {
+  width: 1920px;       /* 원본 디자인 너비 */
+  height: 1080px;      /* 원본 디자인 높이 */
+  position: relative;
+  transform-origin: top left;
+}
+
+/* 창 크기에 맞춰 컨테이너를 스케일링 */
+@media screen {
+  /* 수평, 수직 비율 중 작은 쪽을 기준으로 스케일을 계산 */
+  #container {
+    transform: scale(
+      calc(min(100vw / 1920, 100vh / 1080))
+    );
+  }
+}
+.wrapper {
+  width: 80vw;
+  max-width: 1200px;
+  aspect-ratio: 4 / 3;
+  background-color: #FFFFF6;
+}
+
+/* 아이패드에서 크기 자동 조정 */
+@media screen and (max-width: 1024px) { 
+  .wrapper {
+    zoom: 0.75;
+  }
+}

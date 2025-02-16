@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="kor" dir="Itr">
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+        /* 기본 스타일 */
+        body {
+            background: #fffff6;
+            font-family: "Inter", sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* 공통 레이아웃 */
+        .container {
+            text-align: center;
+            width: 1024px;
+        }
+
+        .title {
+            font-size: 25px;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+
+        .subtitle {
+            font-size: 20px;
+            color: #979797;
+            margin-bottom: 40px;
+        }
+
+        /* 버튼 스타일 */
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            border: none;
+            background: #FF8E03;
+            color: #fffff6;
+            font-size: 20px;
+            font-weight: 800;
+            border-radius: 22px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background 0.3s;
+            position: relative;
+            top: 150px;
+        }
+
+        .btn:hover {
+            background: #E07702;
+        }
+
+        /* 뒤로가기 버튼 */
+        .back-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <section id="when">
+        <div class="container">
+            <div class="title">시 작 할 내 용 을 구 성 해 볼 까 ?</div>
+            <div class="subtitle">먼 저 시 간 대 를 알 려 줘 !</div>
+            <div class="btn-container">
+                <button id="낮" class="btn"> 낮 ☀️ </button>
+                <button id="밤" class="btn"> 밤 🌙</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="where" style="display: none;">
+        <div class="container">
+            <div class="title">주 인 공 이 어 디 에 있 는 지 알 려 줘 !</div>
+            <div class="btn-container">
+                <button id="op1Btn" class="btn">아 그 라 바</button>
+                <button id="op2Btn" class="btn">시 장</button>
+                <button id="op3Btn" class="btn">왕 궁</button>
+                <button id="op4Btn" class="btn">마 법 의 동 굴</button>
+                <button id="op5Btn" class="btn">지 니 의 세 계</button>
+            </div>
+            <button id="backToWhen" class="back-btn">←</button>
+        </div>
+    </section>
+
+    <section id="what" style="display: none;">
+        <div class="container">
+            <div class="title">주 인 공 이 무 엇 을 하 는 지 알 려 줘 !</div>
+            <div class="btn-container">
+                <button id="magic-lamp" class="btn">마 법 의 램 프 로 세 가 지 소 원 을 빌 기 시 작 했 어 !</button>
+                <button id="treasure" class="btn">반 짝 이 는 보 물 을 발 견 했 어 !</button>
+                <button id="magic-carpet" class="btn">마 법 의 양 탄 자 를 타 고 날 아 다 니 고 있 어 !</button>
+            </div>
+            <button id="backToWhere" class="back-btn">←</button>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // 각 섹션 가져오기
+            const whenSection = document.getElementById("when");
+            const whereSection = document.getElementById("where");
+            const whatSection = document.getElementById("what");
+
+            // 뒤로가기 버튼
+            const backToWhenBtn = document.getElementById("backToWhen");
+            const backToWhereBtn = document.getElementById("backToWhere");
+
+            function saveData(key, value) {
+                localStorage.setItem(key, value);
+            }
+
+            function goToNextSection(current, next) {
+                current.style.display = "none";
+                next.style.display = "block";
+            }
+
+            // 시간 선택 → 장소 선택 섹션으로 이동
+            document.getElementById("낮").addEventListener("click", () => {
+                saveData("time", "낮");
+                goToNextSection(whenSection, whereSection);
+            });
+
+            document.getElementById("밤").addEventListener("click", () => {
+                saveData("time", "밤");
+                goToNextSection(whenSection, whereSection);
+            });
+
+            // 장소 선택 → 행동 선택 섹션으로 이동
+            document.getElementById("op1Btn").addEventListener("click", () => {
+                saveData("place", "아그라바");
+                goToNextSection(whereSection, whatSection);
+            });
+
+            document.getElementById("op2Btn").addEventListener("click", () => {
+                saveData("place", "시장");
+                goToNextSection(whereSection, whatSection);
+            });
+
+            document.getElementById("op3Btn").addEventListener("click", () => {
+                saveData("place", "왕궁");
+                goToNextSection(whereSection, whatSection);
+            });
+
+            document.getElementById("op4Btn").addEventListener("click", () => {
+                saveData("place", "마법의 동굴");
+                goToNextSection(whereSection, whatSection);
+            });
+
+            document.getElementById("op5Btn").addEventListener("click", () => {
+                saveData("place", "지니의 세계");
+                goToNextSection(whereSection, whatSection);
+            });
+
+            // 행동 선택 → Drawing.html로 이동
+            function goToDrawingPage(action) {
+                saveData("action", action);
+                window.location.href = "Drawing.html";
+            }
+
+            document.getElementById("magic-lamp").addEventListener("click", () => {
+                goToDrawingPage("램프를 문질렀다!");
+            });
+
+            document.getElementById("treasure").addEventListener("click", () => {
+                goToDrawingPage("보물을 발견했다!");
+            });
+
+            document.getElementById("magic-carpet").addEventListener("click", () => {
+                goToDrawingPage("양탄자를 타고 날아다닌다!");
+            });
+
+            // 뒤로가기 기능
+            backToWhenBtn.addEventListener("click", () => {
+                goToNextSection(whereSection, whenSection);
+            });
+
+            backToWhereBtn.addEventListener("click", () => {
+                goToNextSection(whatSection, whereSection);
+            });
+        });
+    </script>
+
+</body>
+</html>
