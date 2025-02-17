@@ -47,11 +47,15 @@ pipe.enable_vae_slicing()
 
 # ✅ 부정적 프롬프트 설정
 negative_prompt = (
-    "extra limbs, extra fingers, malformed hands, missing fingers, extra hands, "
-    "mutated hands, deformed hands, unnatural hand position, bad anatomy, "
+    "extra limbs,extra arms, extra legs, extra fingers, malformed hands, missing fingers, extra hands, "
+    "mutated hands, deformed hands, unnatural hand position, bad anatomy, close-up, horse legs, horse body, horse, "
     "disfigured body, asymmetrical hands, incorrect fingers, long unnatural fingers, "
-    "floating fingers, deformed arms, blurry, distorted, glitch, disproportioned features, "
-    "low-quality, low-resolution, grainy, overly saturated, poorly rendered"
+    "multiple people, extra person, extra face, no person, no face, extra hands, multiple faces, extra heads, multiple heads, mutated, distorted face, disfigured,  "
+    "floating fingers, deformed arms, blurry, distorted, glitch, disproportioned features, deformed face, missing eyeballs, "
+    "low-quality, low-resolution, grainy, overly saturated, poorly rendered, distorted face, extra faces"
+    "candle lamp, alcohol burner, modern lamp, candles, electric lamp, glass lamp, chandelier, lantern,"
+    "muscles, angry face, mustache, muscular body, muscular arms, bulky bodyshape, creepy, angry, ugly, wrinkly skin, old, cranky, " 
+    "scary, blurry, hyper-realistic, overly defined muscles, bodybuilder, superhero physique, deformed face, deformed nose, malformed face"
 )
 
 # ✅ 상태 변수 (비동기 작업 상태 관리)
