@@ -70,7 +70,7 @@ def preprocess_sketch(image):
     sharpness = ImageEnhance.Sharpness(contrast).enhance(1.5)
     return sharpness.resize((512, 512), Image.Resampling.LANCZOS)
 
-# ✅ 비동기 이미지 생성 함수 (쓰레드 사용)
+# ✅ 비동기 이미지 생성 함수 (스케치 포함)
 def generate_images(prompt, control_image):
     global image_generation_status
 
@@ -119,14 +119,14 @@ def generate():
         # ✅ 이미지 전처리
         control_image = preprocess_sketch(image)
 
-         # ✅ 새 요청이 들어올 때마다 `image_generation_status` 초기화!
+        # ✅ 상태 초기화
         global image_generation_status
         image_generation_status = {
             "processing": True,
             "image_urls": []
         }
 
-        # ✅ 비동기 이미지 생성 (새로운 쓰레드에서 실행)
+        # ✅ 비동기 이미지 생성 실행
         threading.Thread(target=generate_images, args=(prompt, control_image)).start()
 
         return jsonify({"message": "이미지 생성 중", "status": "processing"}), 202
@@ -134,7 +134,7 @@ def generate():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-# ✅ `/api/status` 추가 → makeimage.html에서 호출
+# ✅ makeimage.html에서 호출
 @app.route('/api/status', methods=['GET'])
 def check_status():
     return jsonify(image_generation_status)
@@ -170,19 +170,16 @@ def generate_prompt():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-
 # ✅ 비동기 이미지 생성 함수 (프롬프트 개수에 맞게 이미지 생성)
-def generate_images_prompts(prompts, control_image):
+def generate_images_from_prompts(prompts, control_image):
     global image_generation_status
 
-    # ✅ 상태 변경 (이미지 생성 중)
     image_generation_status["processing"] = True
     image_generation_status["image_urls"] = []
 
     generator = torch.Generator(device).manual_seed(42)
     output_paths = []
 
-    # ✅ 최대 4개의 프롬프트를 사용하여 각각 이미지 생성
     for i, prompt in enumerate(prompts):
         output = pipe(
             prompt=prompt,
@@ -198,7 +195,6 @@ def generate_images_prompts(prompts, control_image):
         output.save(output_path)
         output_paths.append(f"/static/output/{output_filename}")
 
-    # ✅ 상태 변경 (이미지 생성 완료)
     image_generation_status["processing"] = False
     image_generation_status["image_urls"] = output_paths
     print(f"✅ Image generation complete: {output_paths}")
