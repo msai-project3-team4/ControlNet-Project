@@ -37,7 +37,7 @@ controlnet = ControlNetModel.from_pretrained(
 
 # ✅ Stable Diffusion 모델 로드
 pipe = StableDiffusionControlNetPipeline.from_pretrained(
-    "Yntec/samaritan3dCartoon2MVAE",
+    "Yntec/Wonder",
     controlnet=controlnet,
     torch_dtype=torch.float16
 ).to(device)
