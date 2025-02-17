@@ -144,6 +144,65 @@ def check_status():
 def static_files(filename):
     return send_from_directory('static/output', filename)
 
+# ✅ 프롬프트 API
+@app.route('/api/generate_prompt', methods=['POST'])
+def generate_prompt():
+    try:
+        data = request.json
+        prompts = data.get("prompts", [])
+
+        # ✅ 프롬프트 개수 제한 (최소 1개, 최대 4개)
+        if not isinstance(prompts, list) or not (1 <= len(prompts) <= 4):
+            return jsonify({"error": "프롬프트는 최소 1개, 최대 4개까지 입력 가능합니다."}), 400
+
+        # ✅ 상태 초기화
+        global image_generation_status
+        image_generation_status = {"processing": True, "image_urls": []}
+
+        # ✅ ControlNet에 넘길 빈 이미지 생성 (스케치 없이 프롬프트만 사용)
+        blank_image = Image.new("RGB", (512, 512), (255, 255, 255))
+
+        # ✅ 비동기 이미지 생성 실행
+        threading.Thread(target=generate_images_from_prompts, args=(prompts, blank_image)).start()
+
+        return jsonify({"message": "이미지 생성 중", "status": "processing"}), 202
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+# ✅ 비동기 이미지 생성 함수 (프롬프트 개수에 맞게 이미지 생성)
+def generate_images_prompts(prompts, control_image):
+    global image_generation_status
+
+    # ✅ 상태 변경 (이미지 생성 중)
+    image_generation_status["processing"] = True
+    image_generation_status["image_urls"] = []
+
+    generator = torch.Generator(device).manual_seed(42)
+    output_paths = []
+
+    # ✅ 최대 4개의 프롬프트를 사용하여 각각 이미지 생성
+    for i, prompt in enumerate(prompts):
+        output = pipe(
+            prompt=prompt,
+            negative_prompt=negative_prompt,
+            image=control_image,
+            num_inference_steps=75,
+            guidance_scale=9.0,
+            generator=generator
+        ).images[0]
+
+        output_filename = f"output_{i+1}.png"
+        output_path = os.path.join(OUTPUT_FOLDER, output_filename)
+        output.save(output_path)
+        output_paths.append(f"/static/output/{output_filename}")
+
+    # ✅ 상태 변경 (이미지 생성 완료)
+    image_generation_status["processing"] = False
+    image_generation_status["image_urls"] = output_paths
+    print(f"✅ Image generation complete: {output_paths}")
+
 # ✅ Flask 서버 실행
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000)
