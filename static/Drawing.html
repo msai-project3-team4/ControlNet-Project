@@ -1,155 +1,172 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DRAWRY-Drawing</title>
     <style>
-        /* 기존 CSS 유지 */
-        #container {
-            width: 1366px;
-            height: 1024px;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform-origin: top left;
-            transform: translate(-50%, -50%);
-        }
+/* 컨테이너 스타일 */
+#container {
+  width: 90vw;
+  max-width: 1920px;
+  height: 90vh;
+  max-height: 1080px;
+  display: flex;
+  flex-direction: column; /* 세로 정렬 */
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: #fffff6;
+}
 
-        @media screen {
-            #container {
-                transform: translate(-50%, -50%) scale(calc(min(100vw / 1366, 100vh / 1024)));
-            }
-        }
+/* 안내 문구 (캔버스 위) */
+#guideText {
+  text-align: center;
+  color: #979797;
+  font-size: 2vw;
+  font-family: Inter, sans-serif;
+  font-weight: 800;
+  margin-bottom: 20px; /* 캔버스와 간격 */
+}
 
-        .drawingsection {
-            border: 5px solid #ff8e03;
-            border-radius: 16px;
-            cursor: crosshair;
-            background: white;
-            touch-action: none;
-        }
+#selectedInfo{
+  text-align: center;
+  color: #979797;
+  font-size: 2vw;
+  font-family: Inter, sans-serif;
+  font-weight: 800;
+  margin-bottom: 20px; /* 캔버스와 간격 */
+  display: none;
+}
 
-        .toolbox {
-            width: 435px;
-            height: 100px;
-            position: absolute;
-            left: 787px;
-            top: 981px;
-            background: white;
-            border: 7px solid #ff8e03;
-            border-radius: 16px;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: space-around;
-            font-family: Inter, sans-serif;
-        }
+/* 캔버스 */
+.drawingsection {
+  width: 85%;
+  max-width: 1729px;
+  height: auto;
+  aspect-ratio: 2 / 1;
+  border: 5px solid #ff8e03;
+  border-radius: 16px;
+  background: white;
+  touch-action: none;
+}
 
-        .toolbox input[type="range"] {
-            width: 100px;
-        }
+/* 도구 영역 (툴박스) - 캔버스 하단 중앙 */
+.toolbox {
+  width: 80%;
+  max-width: 600px;
+  height: 100px;
+  background: white;
+  border: 7px solid #ff8e03;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin-top: 20px; /* 캔버스 아래 배치 */
+}
 
-        .toolbox input[type="color"] {
-            width: 55px;
-            height: 55px;
-            padding: 0;
-            border: none;
-            background: none;
-        }
+.toolbox input[type="range"] {
+  width: 100px;
+}
+.toolbox input[type="color"] {
+  width: 55px;
+  height: 55px;
+  padding: 0;
+  border: none;
+  background: none;
+}
+.toolbox button {
+  width: 52px;
+  height: 55px;
+  border: none;
+  background-size: cover;
+  cursor: pointer;
+}
+/* 각 버튼 별 배경 이미지*/
+#startDrawingBtn {
+  background: url('src/pencil_.png') no-repeat center;
+}
+#clearBtn {
+  background: url('src/Eraser_.png') no-repeat center;
+}
+#stopDrawingBtn {
+  width: 55px;
+  height: 55px;
+  background: url('src/pointer.png') no-repeat center;
+}
 
-        .toolbox button {
-            width: 52px;
-            height: 55px;
-            border: none;
-            background-size: cover;
-            cursor: pointer;
-        }
-
-        #startDrawingBtn {
-            background: url('src/pencil_.png') no-repeat center;
-        }
-        #clearBtn {
-            background: url('src/Eraser_.png') no-repeat center;
-        }
-        #stopDrawingBtn {
-            width: 55px;
-            height: 55px;
-            background: url('src/pointer.png') no-repeat center;
-        }
-
-        #saveBtn {
-            border: none;
-            width: 276px;
-            height: 67px;
-            background: #ff8e03;
-            border-radius: 40px;
-            position: absolute;
-            left: 10px;
-            top: 0px;
-            cursor: pointer;
-        }
-
-        .saveText {
-            position: absolute;
-            left: 69px;
-            top: 15px;
-            text-align: center;
-            color: #fffff6;
-            font-size: 30px;
-            font-family: Inter, sans-serif;
-            font-weight: 800;
-            word-wrap: break-word;
-        }
-    </style>
-</head>
-<body>
-
-<div id="container">
-    <div style="width: 100%; height: 100%; position: relative">
-        <div style="width: 1920px; height: 1080px; left: 0px; top: 0px; position: absolute; background: #fffff6;"></div>
-
+/* 저장 버튼 */
+#saveBtn {
+  border: none;
+  width: 200px;
+  height: 60px;
+  background: #ff8e03;
+  border-radius: 40px;
+  cursor: pointer;
+  font-size: 20px;
+  color: white;
+  font-weight: bold;
+  position: absolute;
+  right: 10%; /* 왼쪽으로 이동 */
+  top: 58px;
+}   
+</style>
+  </head>
+  <body>
+      <div id="container">
         <!-- 뒤로가기 버튼 -->
-        <button id="backBtn" style="width: 55px; height: 55px; left: 90px; top: 80px; position: absolute; border: none; cursor: pointer; background-color: #fffff6;">←</button>
+        <button id="backBtn"
+          style="
+            width: 55px;
+            height: 55px;
+            left: 90px;
+            top: 80px;
+            position: absolute;
+            border: none;
+            cursor: pointer;
+            background-color: #fffff6;
+          "
+        >←</button>
 
-        <!-- 선택된 정보 표시 -->
-        <div id="selectedInfo" style="position: absolute; left: 401px; top: 56px; text-align: center; color: #979797; font-size: 28px; font-family: Inter, sans-serif; font-weight: 800;"></div>
+        <!-- 안내 문구 -->
+        <div id="guideText">
+          주 인 공 의 전 신 모 습 을 그 려 줘<br />
+          아 래 장 면 의 그 림 을 생 성 해 보 자:D
+        </div>
 
+        <div id="selectedInfo"></div>
+    
         <!-- 캔버스 -->
-        <canvas id="drawingCanvas" class="drawingsection" width="1729" height="862" style="position: absolute; left: 118px; top: 158px;"></canvas>
-
-        <!-- 도구 영역 -->
+        <canvas id="drawingCanvas" class="drawingsection"></canvas>
+    
+        <!-- 도구 영역 (캔버스 하단 중앙) -->
         <div class="toolbox">
-            <input type="range" id="penSize" min="1" max="50" value="5"/>
-            <button id="startDrawingBtn"></button>
-            <button id="clearBtn"></button>
-            <input type="color" id="colorPicker" value="#000000"/>
-            <button id="stopDrawingBtn"></button>
+          <input type="range" id="penSize" min="1" max="50" value="5" />
+          <button id="startDrawingBtn"></button>
+          <button id="clearBtn"></button>
+          <input type="color" id="colorPicker" value="#000000" />
+          <button id="stopDrawingBtn"></button>
         </div>
+    
+        <!-- 저장 버튼 (왼쪽으로 조정) -->
+        <button id="saveBtn">그림 만들기</button>
+      </div>
 
-        <!-- 저장 버튼 -->
-        <div style="position: absolute; left: 1571px; top: 58px; width: 276px; height: 67px;">
-            <button id="saveBtn" class="saveText">그림 만들기</button>
-        </div>
-    </div>
-</div>
+    <script>
+      // 요소 가져오기
+      const canvas = document.getElementById("drawingCanvas");
+      const ctx = canvas.getContext("2d");
+      const startDrawingBtn = document.getElementById("startDrawingBtn");
+      const stopDrawingBtn = document.getElementById("stopDrawingBtn");
+      const clearBtn = document.getElementById("clearBtn");
+      const saveBtn = document.getElementById("saveBtn");
+      const colorPicker = document.getElementById("colorPicker");
+      const penSize = document.getElementById("penSize");
+      let drawing = false;
+      let isDrawingActive = false; // 그리기 모드 활성화 여부
 
-<script type="module">
-    import CONFIG from './config.js';
-    document.addEventListener("DOMContentLoaded", function () {
-        const canvas = document.getElementById("drawingCanvas");
-        const ctx = canvas.getContext("2d");
-        const saveBtn = document.getElementById("saveBtn");
-        const startDrawingBtn = document.getElementById("startDrawingBtn");
-        const stopDrawingBtn = document.getElementById("stopDrawingBtn");
-        const clearBtn = document.getElementById("clearBtn");
-        const colorPicker = document.getElementById("colorPicker");
-        const penSize = document.getElementById("penSize");
-        let drawing = false;
-        let isDrawingActive = false;
-
-        // ✅ 이전 선택 정보 불러와 표시
-        const time = localStorage.getItem("time") || "알 수 없는 시간";
+      // ✅ 이전 선택 정보 불러와 표시
+      const time = localStorage.getItem("time") || "알 수 없는 시간";
         const place = localStorage.getItem("place") || "알 수 없는 장소";
         const action = localStorage.getItem("action") || "알 수 없는 행동";
 
@@ -164,51 +181,115 @@
                 return { offsetX: e.offsetX, offsetY: e.offsetY };
             }
         }
+        
+        // 그리기 시작 버튼 이벤트
+        startDrawingBtn.addEventListener("click", () => {
+    isDrawingActive = true;
+    startDrawingBtn.disabled = true;
+    stopDrawingBtn.disabled = false;
+    canvas.style.borderColor = "#FF4F03"; // 활성화 표시
 
-        function startDrawing(e) {
-            if (!isDrawingActive) return;
-            drawing = true;
-            ctx.strokeStyle = colorPicker.value;
-            ctx.lineWidth = penSize.value;
-            ctx.lineCap = "round";
-            const pos = getEventPos(e);
-            ctx.beginPath();
-            ctx.moveTo(pos.offsetX, pos.offsetY);
-            e.preventDefault();
-        }
+    // 캔버스 크기 설정
+    canvas.width = window.innerWidth * 0.85;  // 85% 크기
+    canvas.height = canvas.width * (2 / 1);  // 비율 맞추기 (2:1)
 
-        function draw(e) {
-            if (!drawing || !isDrawingActive) return;
-            const pos = getEventPos(e);
-            ctx.lineTo(pos.offsetX, pos.offsetY);
-            ctx.stroke();
-            e.preventDefault();
-        }
+    // 실제 캔버스 크기 계산
+    canvas.style.width = `${canvas.width}px`;
+    canvas.style.height = `${canvas.height}px`;
 
-        function stopDrawing(e) {
-            drawing = false;
-            ctx.closePath();
-            if (e) e.preventDefault();
-        }
+    // 안내 문구 숨기고, 선택 정보 표시
+    document.getElementById("guideText").style.display = "none";
+    const selectedInfo = document.getElementById("selectedInfo");
+    selectedInfo.innerText = `주인공이 ${time}에 ${place}에서 ${action}`;
+    selectedInfo.style.display = "block";
+});
+     // 마우스/터치 좌표 추출 (터치 이벤트 지원)
+function getEventPos(e) {
+  const rect = canvas.getBoundingClientRect();
+  let offsetX, offsetY;
 
-        canvas.addEventListener("mousedown", startDrawing);
-        canvas.addEventListener("mousemove", draw);
-        canvas.addEventListener("mouseup", stopDrawing);
-        canvas.addEventListener("mouseleave", stopDrawing);
+  // 터치 이벤트인 경우
+  if (e.touches && e.touches[0]) {
+    offsetX = e.touches[0].clientX - rect.left;
+    offsetY = e.touches[0].clientY - rect.top;
+  } else {  // 마우스 이벤트인 경우
+    offsetX = e.offsetX;
+    offsetY = e.offsetY;
+  }
 
-        startDrawingBtn.addEventListener("click", () => isDrawingActive = true);
-        stopDrawingBtn.addEventListener("click", () => isDrawingActive = false);
-        clearBtn.addEventListener("click", () => ctx.clearRect(0, 0, canvas.width, canvas.height));
+  // 비율을 고려하여 좌표를 반환
+  return {
+    offsetX: offsetX * (canvas.width / rect.width),
+    offsetY: offsetY * (canvas.height / rect.height)
+  };
+}
 
-        saveBtn.addEventListener("click", () => {
+// 그리기 시작
+function startDrawing(e) {
+  if (!isDrawingActive) return;
+  drawing = true;
+  // UI에서 설정한 색상, 굵기 적용
+  ctx.strokeStyle = colorPicker.value;
+  ctx.lineWidth = penSize.value;
+  ctx.lineCap = "round";
+  // 시작 좌표 설정
+  const pos = getEventPos(e);
+  ctx.beginPath();
+  ctx.moveTo(pos.offsetX, pos.offsetY);
+  e.preventDefault();
+}
+
+// 그리기 진행
+function draw(e) {
+  if (!drawing || !isDrawingActive) return;
+  const pos = getEventPos(e);
+  ctx.lineTo(pos.offsetX, pos.offsetY);
+  ctx.stroke();
+  e.preventDefault();
+}
+
+// 그리기 종료
+function stopDrawing(e) {
+  if (!isDrawingActive) return;
+  drawing = false;
+  ctx.closePath();
+  if (e) e.preventDefault();
+}
+
+// 마우스 이벤트 리스너
+canvas.addEventListener("mousedown", startDrawing);
+canvas.addEventListener("mousemove", draw);
+canvas.addEventListener("mouseup", stopDrawing);
+canvas.addEventListener("mouseleave", stopDrawing);
+
+// 터치 이벤트 리스너 (모바일 지원)
+canvas.addEventListener("touchstart", startDrawing);
+canvas.addEventListener("touchmove", draw);
+canvas.addEventListener("touchend", stopDrawing);
+canvas.addEventListener("touchcancel", stopDrawing);
+
+// 그리기 중지 버튼 이벤트
+stopDrawingBtn.addEventListener("click", () => {
+  isDrawingActive = false;
+  drawing = false;
+  startDrawingBtn.disabled = false;
+  stopDrawingBtn.disabled = true;
+  canvas.style.borderColor = "#ff8e03"; // 비활성화 표시
+});
+
+// 캔버스 지우기 버튼 이벤트
+clearBtn.addEventListener("click", () => {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+});
+
+// 그림 저장 버튼 이벤트
+      saveBtn.addEventListener("click", () => {
             const imageData = canvas.toDataURL("image/png");
 
             console.log("📤 Sending request to Flask...");
             console.log("Prompt:", prompt);
 
             localStorage.setItem("imageProcessing", "true");
-            
-            window.location.href = "makeimage.html";
 
             fetch(`${CONFIG.FLASK_SERVER}/api/generate`, {
                 method: "POST",
@@ -225,9 +306,9 @@
             .catch(error => {
                 alert("Flask 서버와 통신 중 오류가 발생했습니다.");
             });
-        });
-    });
-</script>
 
-</body>
+            window.location.href = "9_makeimage.html";
+        });
+    </script>
+  </body>
 </html>
