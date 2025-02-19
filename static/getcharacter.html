@@ -1,201 +1,331 @@
 <!DOCTYPE html>
 <html lang="kor" dir="Itr">
-<head>
-    <meta charset="utf-8">
-    <title></title>
-    <style>
-        /* 기본 스타일 */
-        body {
-            background: #fffff6;
-            font-family: "Inter", sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+        <style>
+            /* 기본 스타일 */
+body {
+    background: #fffff6;
+    font-family: "Inter", sans-serif;
+    margin:0;
+    padding:0;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 
-        /* 공통 레이아웃 */
-        .container {
-            text-align: center;
-            width: 1024px;
-        }
+}
 
-        .title {
-            font-size: 25px;
-            font-weight: 800;
-            margin-bottom: 20px;
-        }
+/*공통 레이아웃*/
+.container{
+    text-align: center;
+    width: 1024px;
+}
 
-        .subtitle {
-            font-size: 20px;
-            color: #979797;
-            margin-bottom: 40px;
-        }
+.title{
+    font-size: 25px;
+    font-weight: 800;
+    margin-bottom: 20px;
+}
 
-        /* 버튼 스타일 */
-        .btn-container {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
+.subtitle{
+    font-size: 20px;
+    color:#979797;
+    margin-bottom: 40px;
 
-        .btn {
-            border: none;
-            background: #FF8E03;
-            color: #fffff6;
-            font-size: 20px;
-            font-weight: 800;
-            border-radius: 22px;
-            padding: 10px 20px;
-            cursor: pointer;
-            transition: background 0.3s;
-            position: relative;
-            top: 150px;
-        }
+}
 
-        .btn:hover {
-            background: #E07702;
-        }
+/*버튼 스타일*/
+.btn-container{ 
+    display:flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap:wrap;
+}
 
-        /* 뒤로가기 버튼 */
-        .back-btn {
-            background: none;
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
-            position: absolute;
-            top: 20px;
-            left: 20px;
-        }
-    </style>
-</head>
-<body>
+.btn { 
+    border: none;
+    background:#FF8E03;
+    color: #fffff6;
+    font-size: 20px;
+    font-weight: 800;
+    border-radius: 22px; 
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background 0.3s;
+    position:relative;
+    top: 150px;    
+}
 
-    <section id="when">
-        <div class="container">
-            <div class="title">시 작 할 내 용 을 구 성 해 볼 까 ?</div>
-            <div class="subtitle">먼 저 시 간 대 를 알 려 줘 !</div>
-            <div class="btn-container">
-                <button id="낮" class="btn"> 낮 ☀️ </button>
-                <button id="밤" class="btn"> 밤 🌙</button>
+.btn:hover {
+    background: #E07702;
+
+}
+
+/*뒤로가기 버튼*/ 
+
+.back-btn{
+    background:none;
+    border:none;
+    font-size: 20px;
+    cursor: pointer;
+    position: absolute;
+    top: 20px;
+    left:20px;
+}
+
+
+.btn-wrapper {
+    position: relative;
+    display: inline-block;
+    text-align: center;
+}
+
+/* 기본적으로 정보 상자는 숨김 */
+.info-box {
+    display: none;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #FFFFF6;
+    border: 5px solid #FEDF50;
+    border-radius: 23px;
+    padding: 15px;
+    font-size: 16px;
+    font-weight: 800;
+    text-align: center;
+    width: 220px;
+    color: #FF8E03;
+    white-space: nowrap;
+    z-index: 10;
+}
+
+/* 말풍선 삼각형 (아래 방향) */
+.info-box::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 10px;
+    border-style: solid;
+    border-color: #FEDF50 transparent transparent transparent;
+}
+
+/* 마우스 오버 시 표시 */
+.btn-wrapper:hover.info-box {
+    display: block;
+}
+
+.button-wrapper2 {
+    display: flex;
+    flex-direction: column; /* 버튼을 세로 정렬 */
+    align-items: center; /* 가운데 정렬 */
+    gap: 15px; /* 버튼 사이 간격 조정 */
+}
+
+        </style>
+    </head>
+    <body>
+
+        <section id="when">
+            <div class="container">
+                <div class="title">시 작 할 내 용 을 구 성 해 볼 까 ?</div>
+                <div class="subtitle">먼 저 시 간 대 를 알 려 줘 !</div>
+                <div class="btn-container">
+                    <button id="morning" class="btn"> 낮 ☀️ </button>
+                    <button id="night" class="btn"> 밤 🌙</button>
+                </div>
+                <button id="backBtn" class="back-btn">←</button>
+
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section id="where" style="display: none;">
-        <div class="container">
-            <div class="title">주 인 공 이 어 디 에 있 는 지 알 려 줘 !</div>
-            <div class="btn-container">
-                <button id="op1Btn" class="btn">아 그 라 바</button>
-                <button id="op2Btn" class="btn">시 장</button>
-                <button id="op3Btn" class="btn">왕 궁</button>
-                <button id="op4Btn" class="btn">마 법 의 동 굴</button>
-                <button id="op5Btn" class="btn">지 니 의 세 계</button>
+        <section id="where">
+            <div class="container">
+                    <div class="title">시 작 할 내 용 을 구 성 해 볼 까 ?</div>
+                    <div class="subtitle">주 인 공 이 어 디 에 있 는 지 알 려 줘 !</div>
+                    <div class="btn-wrapper">
+                        <button id="op1Btn" class="btn">아 그 라 바</button>
+                        <div id="agraba" class="info-box">가 상 의 도 시 🌇</div>
+                    </div>
+                    
+                    <div class="btn-wrapper">
+                        <button id="op2Btn" class="btn">시 장</button>
+                        <div id="market" class="info-box">알 라 딘 이 사 는 곳 🧺</div>
+                    </div>
+                    
+                    <div class="btn-wrapper">
+                        <button id="op3Btn" class="btn">왕 궁</button>
+                        <div id="castle" class="info-box">공 주 가 사 는 웅 장 한 성 🕌</div>
+                    </div>
+                    
+                    <div class="btn-wrapper">
+                        <button id="op4Btn" class="btn">마 법 의 동 굴</button>
+                        <div id="cave" class="info-box">램 프 가 있 는 신 비 한 동 굴 🌌</div>
+                    </div>
+                    
+                    <div class="btn-wrapper">
+                        <button id="op5Btn" class="btn">지 니 의 세 계</button>
+                        <div id="genie" class="info-box">램 프 속 지 니 의 마 법 공 간 🧞</div>
+                    </div>
+                    <button id="backBtn" class="back-btn">←</button>
+                    
+        </section>
+
+        <section id="what">
+
+            <div class ="container">
+                <div class="title">시 작 할 내 용 을 구 성 해 볼 까 ?</div>
+                <div class="subtitle">주 인 공 이 무 엇 을 하 는 지 알 려 줘 !</div>
+                
+                <div class="button-wrapper2">
+                    <button id="magic lamp" class="btn">마 법 의 램 프 로 세 가 지 소 원 을 빌 기 시 작 했 어 !</button>
+                    <button id="treasure" class="btn">반 짝 이 는 보 물 을 발 견 했 어 !</button>
+                    <button id="magic carpet" class="btn">마 법 의 양 탄 자 를 타 고 날 아 다 니 고 있 어 !</button>
+
+                </div>
+                <button id="backBtn" class="back-btn">←</button>
+
             </div>
-            <button id="backToWhen" class="back-btn">←</button>
-        </div>
-    </section>
 
-    <section id="what" style="display: none;">
-        <div class="container">
-            <div class="title">주 인 공 이 무 엇 을 하 는 지 알 려 줘 !</div>
-            <div class="btn-container">
-                <button id="magic-lamp" class="btn">마 법 의 램 프 로 세 가 지 소 원 을 빌 기 시 작 했 어 !</button>
-                <button id="treasure" class="btn">반 짝 이 는 보 물 을 발 견 했 어 !</button>
-                <button id="magic-carpet" class="btn">마 법 의 양 탄 자 를 타 고 날 아 다 니 고 있 어 !</button>
-            </div>
-            <button id="backToWhere" class="back-btn">←</button>
-        </div>
-    </section>
+        </section>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            // 각 섹션 가져오기
-            const whenSection = document.getElementById("when");
-            const whereSection = document.getElementById("where");
-            const whatSection = document.getElementById("what");
+        <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // 섹션 가져오기
+        const whenSection = document.getElementById("when");
+        const whereSection = document.getElementById("where");
+        const whatSection = document.getElementById("what");
 
-            // 뒤로가기 버튼
-            const backToWhenBtn = document.getElementById("backToWhen");
-            const backToWhereBtn = document.getElementById("backToWhere");
+        // 버튼 가져오기
+        const morningBtn = document.getElementById("morning");
+        const nightBtn = document.getElementById("night");
 
-            function saveData(key, value) {
-                localStorage.setItem(key, value);
+        const op1Btn = document.getElementById("op1Btn");
+        const op2Btn = document.getElementById("op2Btn");
+        const op3Btn = document.getElementById("op3Btn");
+        const op4Btn = document.getElementById("op4Btn");
+        const op5Btn = document.getElementById("op5Btn");
+
+        const magicLampBtn = document.getElementById("magic-lamp");
+        const treasureBtn = document.getElementById("treasure");
+        const magicCarpetBtn = document.getElementById("magic-carpet");
+
+        const backBtns = document.querySelectorAll(".back-btn");
+
+        // 초기 설정: 첫 번째 섹션만 보이게 함
+        whenSection.style.display = "block";
+        whereSection.style.display = "none";
+        whatSection.style.display = "none";
+
+        // 공통 이벤트 추가 함수 (클릭 + 터치)
+        function addClickAndTouchEvent(element, callback) {
+            if (element) {
+                element.addEventListener("click", callback);
+                element.addEventListener("touchstart", function (event) {
+                    event.preventDefault(); // 터치 시 클릭 이벤트 중복 방지
+                    callback();
+                });
             }
+        }
 
-            function goToNextSection(current, next) {
-                current.style.display = "none";
-                next.style.display = "block";
-            }
+        function saveData(key, value) {
+            localStorage.setItem(key, value);
+        }
 
-            // 시간 선택 → 장소 선택 섹션으로 이동
-            document.getElementById("낮").addEventListener("click", () => {
-                saveData("time", "낮");
-                goToNextSection(whenSection, whereSection);
-            });
+        function goToNextSection(current, next) {
+            current.style.display = "none";
+            next.style.display = "block";
+        }
 
-            document.getElementById("밤").addEventListener("click", () => {
-                saveData("time", "밤");
-                goToNextSection(whenSection, whereSection);
-            });
+        // 시간 선택 → 장소 선택 섹션으로 이동
+        addClickAndTouchEvent(morningBtn, () => {
+            saveData("time", "낮");
+            goToNextSection(whenSection, whereSection);
+        });
 
-            // 장소 선택 → 행동 선택 섹션으로 이동
-            document.getElementById("op1Btn").addEventListener("click", () => {
-                saveData("place", "아그라바");
-                goToNextSection(whereSection, whatSection);
-            });
+        addClickAndTouchEvent(nightBtn, () => {
+            saveData("time", "밤");
+            goToNextSection(whenSection, whereSection);
+        });
 
-            document.getElementById("op2Btn").addEventListener("click", () => {
-                saveData("place", "시장");
-                goToNextSection(whereSection, whatSection);
-            });
+        // 장소 선택 → 행동 선택 섹션으로 이동
+        addClickAndTouchEvent(op1Btn, () => {
+            saveData("place", "아그라바");
+            goToNextSection(whereSection, whatSection);
+        });
 
-            document.getElementById("op3Btn").addEventListener("click", () => {
-                saveData("place", "왕궁");
-                goToNextSection(whereSection, whatSection);
-            });
+        addClickAndTouchEvent(op2Btn, () => {
+            saveData("place", "시장");
+            goToNextSection(whereSection, whatSection);
+        });
 
-            document.getElementById("op4Btn").addEventListener("click", () => {
-                saveData("place", "마법의 동굴");
-                goToNextSection(whereSection, whatSection);
-            });
+        addClickAndTouchEvent(op3Btn, () => {
+            saveData("place", "왕궁");
+            goToNextSection(whereSection, whatSection);
+        });
 
-            document.getElementById("op5Btn").addEventListener("click", () => {
-                saveData("place", "지니의 세계");
-                goToNextSection(whereSection, whatSection);
-            });
+        addClickAndTouchEvent(op4Btn, () => {
+            saveData("place", "마법의 동굴");
+            goToNextSection(whereSection, whatSection);
+        });
 
-            // 행동 선택 → Drawing.html로 이동
-            function goToDrawingPage(action) {
-                saveData("action", action);
-                window.location.href = "Drawing.html";
-            }
+        addClickAndTouchEvent(op5Btn, () => {
+            saveData("place", "지니의 세계");
+            goToNextSection(whereSection, whatSection);
+        });
 
-            document.getElementById("magic-lamp").addEventListener("click", () => {
-                goToDrawingPage("램프를 문질렀다!");
-            });
+        // 행동 선택 → Drawing.html로 이동
+        function goToDrawingPage(action) {
+            saveData("action", action);
+            window.location.href = "8_Drawing.html";
+        }
 
-            document.getElementById("treasure").addEventListener("click", () => {
-                goToDrawingPage("보물을 발견했다!");
-            });
+        addClickAndTouchEvent(magicLampBtn, () => {
+            goToDrawingPage("램프를 문질렀다!");
+        });
 
-            document.getElementById("magic-carpet").addEventListener("click", () => {
-                goToDrawingPage("양탄자를 타고 날아다닌다!");
-            });
+        addClickAndTouchEvent(treasureBtn, () => {
+            goToDrawingPage("보물을 발견했다!");
+        });
 
-            // 뒤로가기 기능
-            backToWhenBtn.addEventListener("click", () => {
-                goToNextSection(whereSection, whenSection);
-            });
+        addClickAndTouchEvent(magicCarpetBtn, () => {
+            goToDrawingPage("양탄자를 타고 날아다닌다!");
+        });
 
-            backToWhereBtn.addEventListener("click", () => {
-                goToNextSection(whatSection, whereSection);
+        // 뒤로 가기 버튼 기능 추가
+        backBtns.forEach((btn) => {
+            btn.addEventListener("click", () => {
+                if (whereSection.style.display === "block") {
+                    goToNextSection(whereSection, whenSection);
+                } else if (whatSection.style.display === "block") {
+                    goToNextSection(whatSection, whereSection);
+                }
             });
         });
-    </script>
 
+        // 정보 박스 표시 (클릭 + 터치)
+        document.querySelectorAll(".btn-wrapper").forEach(wrapper => {
+            const btn = wrapper.querySelector(".btn");
+            const infoBox = wrapper.querySelector(".info-box");
+
+            function showInfo() {
+                infoBox.style.display = "block";
+            }
+
+            function hideInfo() {
+                infoBox.style.display = "none";
+            }
+
+            addClickAndTouchEvent(btn, showInfo);
+
+            btn.addEventListener("mouseover", showInfo);
+            btn.addEventListener("mouseout", hideInfo);
+            btn.addEventListener("touchend", hideInfo);
+        });
+    });
+</script>
 </body>
 </html>
