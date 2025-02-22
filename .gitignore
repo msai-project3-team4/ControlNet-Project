@@ -1,3 +1,5 @@
 __pycache__/
 /static/config.js
 .env
+cert.pem
+key.pem

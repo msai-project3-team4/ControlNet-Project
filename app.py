@@ -16,7 +16,7 @@ load_dotenv()
 FLASK_SERVER = os.getenv("FLASK_SERVER", "http://localhost:5000")
 
 app = Flask(__name__, static_folder="static")
-CORS(app)
+CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 # ✅ Flask 서버 URL 확인
 print(f"Flask Server is running at: {FLASK_SERVER}")
@@ -107,7 +107,7 @@ def generate():
     try:
         data = request.json
         image_data = data.get("image", None)
-        prompt = data.get("prompt", "A character in a fantasy world")
+        prompt = data.get("prompt", "A default prompt")
 
         if not image_data:
             return jsonify({"error": "이미지가 전송되지 않았습니다."}), 400
