@@ -26,6 +26,7 @@ ControlNet과 Stable Diffusion을 이용하여 사용자가 그린 스케치를 
 ## 🔒 보안 강화 & 운영 경험
 <p>✅ NGINX를 활용한 Reverse Proxy 및 DDoS 공격 방어</p>
 <p>✅ 서버 모니터링 중 외부 해킹 공격 시도를 감지하여 보안 코드 적용 후 방어 성공</p>
+
 ## 📂 프로젝트 구조
 ControlNet-Project/<p>
 │── Model/                  # Model FineTuning<p>
