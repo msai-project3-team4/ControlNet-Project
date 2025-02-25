@@ -7,7 +7,7 @@
 ![프로젝트 데모](static/ControlNetDrawing.gif)
 
 ## 📝 프로젝트 개요
-ControlNet과 Stable Diffusion을 이용하여 사용자가 그린 스케치를 기반으로 고품질 이미지를 생성하는 기능능입니다.
+ControlNet과 Stable Diffusion을 이용하여 사용자가 그린 스케치를 기반으로 고품질 이미지를 생성하는 기능입니다.
 사용자는 간단한 스케치를 그린 후, 특정 프롬프트를 추가하여 더욱 세밀한 이미지를 생성할 수 있습니다.
 
 주요 기능
